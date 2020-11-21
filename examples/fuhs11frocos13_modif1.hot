@@ -1,0 +1,29 @@
+/* YES. modified version of fuhs11frocos13.hot with symbol fun removed
+(negative type) */
+
+TYPES
+N;
+
+FUNS
+0 : N;
+s : N => N;
+avg : N => N => N;
+check : N => N;
+apply : (N => N) => N => N;
+
+VARS
+x, y : N;
+F : N => N;
+
+RULES
+avg 0 0 -> 0;
+avg 0 (s 0) -> 0;
+// avg 0 (s 0) -> s 0; typo I guess
+avg 0 (s (s 0)) -> s 0;
+avg (s x) y -> avg x (s y);
+avg x (s (s (s y))) -> s (avg (s x) y);
+
+apply F y -> F (check y);
+
+check 0 -> 0;
+check (s x) -> s (check x);

@@ -1,0 +1,15 @@
+/* YES */
+
+TYPES
+o;
+
+FUNS
+K : (o => o) => (o => o) => (o => o);
+
+VARS
+f, g, h : o => o;
+x : o;
+
+RULES
+K f g x -> f x;
+K (K f g) h -> K f (K g h);

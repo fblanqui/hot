@@ -1,0 +1,14 @@
+/* YES. non-strictly positive type */
+
+TYPES
+C, N;
+
+FUNS
+K : ((C=>N)=>N)=>C;
+f : C=>N;
+
+VARS
+x : (C=>N)=>N;
+
+RULES
+f (K x) -> x f;

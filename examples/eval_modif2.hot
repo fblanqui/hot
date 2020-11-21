@@ -1,0 +1,15 @@
+/* YES. variant of TPDB/TRS/Mixed_HO_10/eval with no rules defining dom */
+
+TYPES
+N;
+
+FUNS
+eval : N => N => N;
+fun : (N => N) => N => N;
+
+VARS
+X, Y : N;
+F : N => N;
+
+RULES
+eval (fun F X) Y -> F X;

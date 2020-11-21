@@ -1,0 +1,21 @@
+/* YES */
+
+TYPES
+o;
+
+FUNS
+nil : o;
+cons, append : o => o => o;
+map : (o => o) => o => o;
+
+VARS
+k, l, m : o;
+f : o => o;
+
+RULES
+append nil l -> l;
+append (cons k l) m -> cons k (append l m);
+map f nil -> nil;
+map f (cons k l) -> cons (f k) (map f l);
+append (append k l) m -> append k (append l m);
+map f (append l k) -> append (map f l) (map f k);

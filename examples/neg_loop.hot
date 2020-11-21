@@ -1,0 +1,15 @@
+/* NO. non-terminating system due to matching on a negative
+constructor: with x=(y:N.f y y), f(c x)(c x) -> x(c x) ->beta f(c x)(c x). */
+
+TYPES
+N, I;
+
+FUNS
+c : (I => N) => I;
+f : I => (I => N);
+
+VARS
+x : I => N;
+
+RULES
+f (c x) -> x;

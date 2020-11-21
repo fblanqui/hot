@@ -1,0 +1,19 @@
+/* YES. "addition" on Brouwer's ordinals */
+
+TYPES
+N, O;
+
+FUNS
+0 : O;
+s : O => O;
+L : (N => O) => O;
++ : O => O => O;
+
+VARS
+x, y : O;
+f : N => O;
+
+RULES
++ x 0 -> x;
++ x (s y) -> s (+ x y);
++ x (L f) -> L (n:N. + x (f n));

@@ -1,0 +1,322 @@
+data ParseResult a
+    = ParseOk a
+    | ParseFailed SrcLoc String 
+
+data Module = Module SrcLoc ModuleName [ModulePragma] (Maybe WarningText) (Maybe [ExportSpec]) [ImportDecl] [Decl]
+data WarningText
+    = DeprText String
+    | WarnText String 
+data ExportSpec
+    = EVar QName
+    | EAbs QName
+    | EThingAll QName
+    | EThingWith QName [CName]
+    | EModuleContents ModuleName 
+data ImportDecl = ImportDecl {
+    importLoc :: SrcLoc,
+    importModule :: ModuleName,
+    importQualified :: Bool,
+    importSrc :: Bool,
+    importPkg :: Maybe String,
+    importAs :: Maybe ModuleName,
+    importSpecs :: Maybe (Bool, [ImportSpec])
+}
+data ImportSpec
+    = IVar Name
+    | IAbs Name
+    | IThingAll Name
+    | IThingWith Name [CName] 
+data Assoc
+    = AssocNone
+    | AssocLeft
+    | AssocRight 
+data Decl
+    = TypeDecl SrcLoc Name [TyVarBind] Type
+    | TypeFamDecl SrcLoc Name [TyVarBind] (Maybe Kind)
+    | DataDecl SrcLoc DataOrNew Context Name [TyVarBind] [QualConDecl] [Deriving]
+    | GDataDecl SrcLoc DataOrNew Context Name [TyVarBind] (Maybe Kind) [GadtDecl] [Deriving]
+    | DataFamDecl SrcLoc Context Name [TyVarBind] (Maybe Kind)
+    | TypeInsDecl SrcLoc Type Type
+    | DataInsDecl SrcLoc DataOrNew Type [QualConDecl] [Deriving]
+    | GDataInsDecl SrcLoc DataOrNew Type (Maybe Kind) [GadtDecl] [Deriving]
+    | ClassDecl SrcLoc Context Name [TyVarBind] [FunDep] [ClassDecl]
+    | InstDecl SrcLoc Context QName [Type] [InstDecl]
+    | DerivDecl SrcLoc Context QName [Type]
+    | InfixDecl SrcLoc Assoc Int [Op]
+    | DefaultDecl SrcLoc [Type]
+    | SpliceDecl SrcLoc Exp
+    | TypeSig SrcLoc [Name] Type
+    | FunBind [Match]
+    | PatBind SrcLoc Pat (Maybe Type) Rhs Binds
+    | ForImp SrcLoc CallConv Safety String Name Type
+    | ForExp SrcLoc CallConv String Name Type
+    | RulePragmaDecl SrcLoc [Rule]
+    | DeprPragmaDecl SrcLoc [([Name], String)]
+    | WarnPragmaDecl SrcLoc [([Name], String)]
+    | InlineSig SrcLoc Bool Activation QName
+    | InlineConlikeSig SrcLoc Activation QName
+    | SpecSig SrcLoc QName [Type]
+    | SpecInlineSig SrcLoc Bool Activation QName [Type]
+    | InstSig SrcLoc Context QName [Type]
+    | AnnPragma SrcLoc Annotation 
+data Binds
+    = BDecls [Decl]
+    | IPBinds [IPBind] 
+data IPBind = IPBind SrcLoc IPName Exp
+data ClassDecl
+    = ClsDecl Decl
+    | ClsDataFam SrcLoc Context Name [TyVarBind] (Maybe Kind)
+    | ClsTyFam SrcLoc Name [TyVarBind] (Maybe Kind)
+    | ClsTyDef SrcLoc Type Type 
+data InstDecl
+    = InsDecl Decl
+    | InsType SrcLoc Type Type
+    | InsData SrcLoc DataOrNew Type [QualConDecl] [Deriving]
+    | InsGData SrcLoc DataOrNew Type (Maybe Kind) [GadtDecl] [Deriving] 
+type Deriving = (QName, [Type])
+data DataOrNew
+    = DataType
+    | NewType 
+data ConDecl
+    = ConDecl Name [BangType]
+    | InfixConDecl BangType Name BangType
+    | RecDecl Name [([Name], BangType)] 
+data QualConDecl = QualConDecl SrcLoc [TyVarBind] Context ConDecl
+data GadtDecl = GadtDecl SrcLoc Name Type
+data BangType
+    = BangedTy Type
+    | UnBangedTy Type
+    | UnpackedTy Type 
+data Match = Match SrcLoc Name [Pat] (Maybe Type) Rhs Binds
+data Rhs
+    = UnGuardedRhs Exp
+    | GuardedRhss [GuardedRhs] 
+data GuardedRhs = GuardedRhs SrcLoc [Stmt] Exp
+type Context = [Asst]
+data FunDep = FunDep [Name] [Name]
+data Asst
+    = ClassA QName [Type]
+    | InfixA Type QName Type
+    | IParam IPName Type
+    | EqualP Type Type 
+data Type
+    = TyForall (Maybe [TyVarBind]) Context Type
+    | TyFun Type Type
+    | TyTuple Boxed [Type]
+    | TyList Type
+    | TyApp Type Type
+    | TyVar Name
+    | TyCon QName
+    | TyParen Type
+    | TyInfix Type QName Type
+    | TyKind Type Kind 
+data Boxed
+    = Boxed
+    | Unboxed 
+data Kind
+    = KindStar
+    | KindBang
+    | KindFn Kind Kind
+    | KindParen Kind
+    | KindVar Name 
+data TyVarBind
+    = KindedVar Name Kind
+    | UnkindedVar Name 
+data Exp
+    = Var QName
+    | IPVar IPName
+    | Con QName
+    | Lit Literal
+    | InfixApp Exp QOp Exp
+    | App Exp Exp
+    | NegApp Exp
+    | Lambda SrcLoc [Pat] Exp
+    | Let Binds Exp
+    | If Exp Exp Exp
+    | Case Exp [Alt]
+    | Do [Stmt]
+    | MDo [Stmt]
+    | Tuple [Exp]
+    | TupleSection [Maybe Exp]
+    | List [Exp]
+    | Paren Exp
+    | LeftSection Exp QOp
+    | RightSection QOp Exp
+    | RecConstr QName [FieldUpdate]
+    | RecUpdate Exp [FieldUpdate]
+    | EnumFrom Exp
+    | EnumFromTo Exp Exp
+    | EnumFromThen Exp Exp
+    | EnumFromThenTo Exp Exp Exp
+    | ListComp Exp [QualStmt]
+    | ParComp Exp [[QualStmt]]
+    | ExpTypeSig SrcLoc Exp Type
+    | VarQuote QName
+    | TypQuote QName
+    | BracketExp Bracket
+    | SpliceExp Splice
+    | QuasiQuote String String
+    | XTag SrcLoc XName [XAttr] (Maybe Exp) [Exp]
+    | XETag SrcLoc XName [XAttr] (Maybe Exp)
+    | XPcdata String
+    | XExpTag Exp
+    | XChildTag SrcLoc [Exp]
+    | CorePragma String Exp
+    | SCCPragma String Exp
+    | GenPragma String (Int, Int) (Int, Int) Exp
+    | Proc SrcLoc Pat Exp
+    | LeftArrApp Exp Exp
+    | RightArrApp Exp Exp
+    | LeftArrHighApp Exp Exp
+    | RightArrHighApp Exp Exp 
+data Stmt
+    = Generator SrcLoc Pat Exp
+    | Qualifier Exp
+    | LetStmt Binds
+    | RecStmt [Stmt] 
+data QualStmt
+    = QualStmt Stmt
+    | ThenTrans Exp
+    | ThenBy Exp Exp
+    | GroupBy Exp
+    | GroupUsing Exp
+    | GroupByUsing Exp Exp 
+data FieldUpdate
+    = FieldUpdate QName Exp
+    | FieldPun Name
+    | FieldWildcard 
+data Alt = Alt SrcLoc Pat GuardedAlts Binds
+data GuardedAlts
+    = UnGuardedAlt Exp
+    | GuardedAlts [GuardedAlt] 
+data GuardedAlt = GuardedAlt SrcLoc [Stmt] Exp
+data XAttr = XAttr XName Exp
+data Pat
+    = PVar Name
+    | PLit Literal
+    | PNeg Pat
+    | PNPlusK Name Integer
+    | PInfixApp Pat QName Pat
+    | PApp QName [Pat]
+    | PTuple [Pat]
+    | PList [Pat]
+    | PParen Pat
+    | PRec QName [PatField]
+    | PAsPat Name Pat
+    | PWildCard
+    | PIrrPat Pat
+    | PatTypeSig SrcLoc Pat Type
+    | PViewPat Exp Pat
+    | PRPat [RPat]
+    | PXTag SrcLoc XName [PXAttr] (Maybe Pat) [Pat]
+    | PXETag SrcLoc XName [PXAttr] (Maybe Pat)
+    | PXPcdata String
+    | PXPatTag Pat
+    | PXRPats [RPat]
+    | PExplTypeArg QName Type
+    | PQuasiQuote String String
+    | PBangPat Pat 
+data PatField
+    = PFieldPat QName Pat
+    | PFieldPun Name
+    | PFieldWildcard 
+data PXAttr = PXAttr XName Pat
+data RPat
+    = RPOp RPat RPatOp
+    | RPEither RPat RPat
+    | RPSeq [RPat]
+    | RPGuard Pat [Stmt]
+    | RPCAs Name RPat
+    | RPAs Name RPat
+    | RPParen RPat
+    | RPPat Pat 
+data RPatOp
+    = RPStar
+    | RPStarG
+    | RPPlus
+    | RPPlusG
+    | RPOpt
+    | RPOptG 
+data Literal
+    = Char Char
+    | String String
+    | Int Integer
+    | Frac Rational
+    | PrimInt Integer
+    | PrimWord Integer
+    | PrimFloat Rational
+    | PrimDouble Rational
+    | PrimChar Char
+    | PrimString String 
+newtype ModuleName = ModuleName String
+data QName
+    = Qual ModuleName Name
+    | UnQual Name
+    | Special SpecialCon 
+data Name
+    = Ident String
+    | Symbol String 
+data QOp
+    = QVarOp QName
+    | QConOp QName 
+data Op
+    = VarOp Name
+    | ConOp Name 
+data SpecialCon
+    = UnitCon
+    | ListCon
+    | FunCon
+    | TupleCon Boxed Int
+    | Cons
+    | UnboxedSingleCon 
+data CName
+    = VarName Name
+    | ConName Name 
+data IPName
+    = IPDup String
+    | IPLin String 
+data XName
+    = XName String
+    | XDomName String String 
+data Bracket
+    = ExpBracket Exp
+    | PatBracket Pat
+    | TypeBracket Type
+    | DeclBracket [Decl] 
+data Splice
+    = IdSplice String
+    | ParenSplice Exp 
+data Safety
+    = PlayRisky
+    | PlaySafe Bool 
+data CallConv
+    = StdCall
+    | CCall 
+data ModulePragma
+    = LanguagePragma SrcLoc [Name]
+    | OptionsPragma SrcLoc (Maybe Tool) String
+    | AnnModulePragma SrcLoc Annotation 
+data Tool
+    = GHC
+    | HUGS
+    | NHC98
+    | YHC
+    | HADDOCK
+    | UnknownTool String 
+data Rule = Rule String Activation (Maybe [RuleVar]) Exp Exp
+data RuleVar
+    = RuleVar Name
+    | TypedRuleVar Name Type 
+data Activation
+    = AlwaysActive
+    | ActiveFrom Int
+    | ActiveUntil Int 
+data Annotation
+    = Ann Name Exp
+    | TypeAnn Name Exp
+    | ModuleAnn Exp 
+data SrcLoc = SrcLoc {
+    srcFilename :: String,
+    srcLine :: Int,
+    srcColumn :: Int
+}

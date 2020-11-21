@@ -1,0 +1,57 @@
+# HOT, a Higher-Order Termination prover
+# See the COPYRIGHTS and LICENSE files.
+#
+# - Frederic Blanqui, 2010-03-15
+
+RAINBOW :=
+
+MAIN := main
+
+# the order is important !
+FILES_WITH_MLI_1 := lib matrix ord prec call term expr db hs_type
+FILES_WITHOUT_MLI := parser lexer hs_parser hs_lexer
+FILES_WITH_MLI_2 := hot_of_xtc xtc_of_hot xtc_of_hs acc fo size sn loop
+FILES := $(FILES_WITH_MLI_1) $(FILES_WITHOUT_MLI) $(FILES_WITH_MLI_2)
+
+FILES_WITH_MLI := $(FILES_WITH_MLI_1) $(FILES_WITH_MLI_2)
+
+.PRECIOUS: parser.ml lexer.ml hs_parser.ml hs_lexer.ml
+
+FRAGILE_FILES := hot_of_xtc xtc_of_hs
+
+LIBS := $(RAINBOW)/xml-light/xml-light $(RAINBOW)/convert
+
+INCLUDES := -I $(RAINBOW)/xml-light -I $(RAINBOW)
+
+OCAMLC_OPTIONS := -rectypes
+OCAMLOPT_OPTIONS := -rectypes
+OCAMLDOC_OPTIONS := -rectypes -sort -html -d html -short-functors
+
+include $(RAINBOW)/Makefile.ocaml
+
+parser.cmo parser.cmx: parser.cmi
+parser.cmi: term.cmi
+
+hs_parser.cmo hs_parser.cmx: hs_parser.cmi
+hs_parser.cmi: hs_type.cmi
+
+.PHONY: html all dist clean-all
+
+html:
+	$(SHOW) OCAMLDOC
+	$(HIDE) $(OCAMLDOC) $(FILES:%=%.ml) $(MAIN).ml $(FILES_WITH_MLI:%=%.mli)
+
+dist:
+	./create_dist
+
+clean::
+	$(MAKE) -C $(RAINBOW) clean-all
+
+clean-all: clean
+	rm -f Makefile
+
+# on the termination competition platform only
+all:
+	$(MAKE) -C $(RAINBOW) lib
+	$(MAKE) depend
+	$(MAKE)

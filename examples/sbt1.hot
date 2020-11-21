@@ -1,0 +1,13 @@
+/* YES */
+
+TYPES
+N;
+
+FUNS
+s, f : N=>N;
+
+VARS
+x : N;
+
+RULES
+f (s x) -> f ((y:N.y)x);

@@ -1,0 +1,29 @@
+/* YES. variant of TPDB/TRS/Mixed_HO_10/prenex
+   with forall, exists : (term => form) => form
+   instead of (form => form) => form */
+
+TYPES
+term, form;
+
+FUNS
+forall, exists : (term => form) => form;
+not : form => form;
+or, and : form => form => form;
+
+VARS
+P : form;
+Q : term => form;
+
+RULES
+and P (forall (x:term.Q x)) -> forall (x:term.and P (Q x));
+and (forall (x:term.Q x)) P -> forall (x:term.and (Q x) P);
+and P (exists (x:term.Q x)) -> exists (x:term.and P (Q x));
+and (exists (x:term.Q x)) P -> exists (x:term.and (Q x) P);
+
+or P (forall (x:term.Q x)) -> forall (x:term.or P (Q x));
+or (forall (x:term.Q x)) P -> forall (x:term.or (Q x) P);
+or P (exists (x:term.Q x)) -> exists (x:term.or P (Q x));
+or (exists (x:term.Q x)) P -> exists (x:term.or (Q x) P);
+
+not (forall (x:term.Q x)) -> exists (x:term.not (Q x));
+not (exists (x:term.Q x)) -> forall (x:term.not (Q x));

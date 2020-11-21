@@ -1,0 +1,20 @@
+HOT, a Higher-Order Termination prover
+See the COPYRIGHTS and LICENSE files.
+
+The compilation procedure that is provided requires a UNIX-like
+operating system (Linux or Cygwin) with the following tools:
+
+- GNU bash version 4.1.5 http://www.gnu.org/software/bash/
+- GNU sed version 4.2.1 http://www.gnu.org/software/sed/
+- GNU make version 3.81 http://www.gnu.org/software/make/
+- OCaml version 3.12.1 http://caml.inria.fr/
+- Rainbow http://color.inria.fr/
+
+Compilation procedure:
+
+1) make -C rainbow lib
+
+2) make depend
+
+3) make
+

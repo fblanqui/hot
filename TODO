@@ -1,0 +1,40 @@
+HOT, a Higher-Order Termination prover
+See the COPYRIGHTS and LICENSE files.
+
+- consider symbols with arity? in TPDB/TRS/Mixed_HO_10/curry:
+  x a -> f(a) terminates but x a -> f a does not...
+
+- express every thing as a big SMT problem?
+
+- replace rhs abstractions by defined function symbols?
+
+- add position to identifiers for error messages (undeclared identifiers)
+
+DONE:
+
+- optimize system calls: can constraints for detecting non size increasing
+   functions can be gathered in one system call?
+   + memorize types and solutions for each rule?
+  constraints are now gathered by equivalence class of functions
+
+- detect variables that must be set to Inf
+
+- gather variable declarations with the same type
+
+- output XTC in non-curryfied form also
+
+- change XTC identifiers in order to get valid HOT identifiers
+
+- add comments into example hot files
+
+- remove from lib the things moved to Rainbow.util
+
+- fix bug in pattern with deriv.xml
+
+- fix bug in positivity checking in apply.xml
+
+- convert HOT into XTC
+
+- in rainbow, mv things from main to util
+
+- in hot, reuse things from rainbow.util

@@ -1,0 +1,14 @@
+/* YES */
+
+TYPES
+o;
+
+FUNS
+c : o => o;
+
+VARS
+F : o => o;
+X : o;
+
+RULES
+c (F (F X)) -> F X;

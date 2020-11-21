@@ -1,0 +1,14 @@
+/* YES */
+
+TYPES
+A, B;
+
+FUNS
+b : A => B;
+f : B => A;
+
+VARS
+x : A;
+
+RULES
+f (b x) -> x;

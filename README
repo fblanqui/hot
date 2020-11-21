@@ -1,0 +1,71 @@
+HOT, a Higher-Order Termination prover
+See the COPYRIGHTS and LICENSE files.
+
+Installation: see the INSTALL file.
+
+Usage: main [options] [filename]
+
+Options: do "main -h" to get a description of all options.
+
+Formats accepted by HOT:
+- XTC (http://dev.aspsimon.org/xtc.xsd)
+- HOT (described below)
+
+HOT may require the use of external tools:
+
+- an automated termination prover for first-order rewrite systems
+  accepting files in the XTC format (with .xml file extension) and
+  returning YES, NO or MAYBE as result like in the termination
+  competition (see http://termcomp.uibk.ac.at/2011/rules.html)
+
+- a linear program solver accepting files in the lp_solve LP format
+  (http://lpsolve.sourceforge.net/5.5/lp-format.htm) (with .lp file
+  extension)
+
+To test HOT or another prover on TPDB, you can use Makefile.prover by
+setting appropriately the variables PROVER and LOG. A shell script
+"call" is also provided to uniformize prover's output.
+
+------------------------------------------------------------------------------
+HOT format
+------------------------------------------------------------------------------
+
+? means 0 or 1 time
+* means 0 or more times
++ means 1 or more times
+
+single-line comments: // every thing after // is ignored
+multi-lines comments: /* every thing between /* and */ // is ignored
+
+hot_file = typ_part? fun_part? var_part? rule_part?
+
+typ_part = TYPES idents ;
+
+fun_part = FUNS typ_decl*
+
+typ_decl = idents : typ ;
+
+typ = ident | ( typ ) | typ => typ
+
+var_part = VARS typ_decl*
+
+rule_part = RULES rule+
+
+rule = term_no_par -> term_no_par ;
+
+term_no_par = head term*
+
+head = ident | ( abs_no_par )
+
+abs_no_par = ident : typ . term_no_par
+
+term = head | ( term_no_par )
+
+idents = ident | ident , idents
+
+ident = letter+ | symb
+letter = alpha | num | _ | ' | "
+alpha = a | .. | z | A | .. | Z
+num = 0 | .. | 9
+symb = / | (special | - | =)+ | (special | > )+
+special = ! | # | $ | % | & | + | < | ? | @ | \ | ^ | ` | | | ~ | *

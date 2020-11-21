@@ -1,0 +1,20 @@
+/* YES. first-order system */
+
+TYPES
+N;
+
+FUNS
+0 : N;
+s : N => N;
+-, / : N => N => N;
+
+VARS
+x, y : N;
+
+RULES
+- 0 x -> 0;
+- x 0 -> x;
+- (s x) (s y) -> - x y;
+
+/ 0 x -> 0;
+/ (s x) y -> s (/ (- x y) y);

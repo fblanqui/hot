@@ -1,0 +1,101 @@
+comp += [ "-g" "-warn-error" "A" ]
+link += [ "-g" ]
+
+
+(* SECTION libraries *)
+
+begin
+  generated = true
+  has_byte = true
+  has_asm = true
+
+  (* OCaml *)
+  begin library "unix" end
+  begin library "nums" end
+  begin library "bigarray" end
+  begin library "str" end
+
+  (* Others *)
+  begin library "camomile"
+    dirname = [ "devel/tuong/camomile" ]
+    requires = [ "bigarray" ]
+  end
+  begin library "batteries"
+    dirname = [ "devel/tuong/batteries" ]
+    requires = [ "camomile" "nums" "unix" ]
+  end
+  begin library "xml-light"
+    dirname = [ "devel/tuong/xml-light" ]
+  end
+end
+
+
+(* SECTION rainbow *)
+
+begin library "rainbow-lib"
+  dirname = [ "devel/tuong/rainbow" ]
+  files = [ "util.ml" "xtc.ml" "error.ml" "libxml.ml" "xtc_of_xml.ml" "xml_of_xtc.ml" ]
+  requires = [ "xml-light" ]
+end
+
+
+(* SECTION hot *)
+
+begin library "hot-lib"
+  comp += "-rectypes"
+  sort = true
+  files = [ "term.ml" "lib.ml" ]
+
+  requires = [ "rainbow-lib" ]
+end
+
+begin library "hot-haskell"
+  comp += "-rectypes"
+  sort = true
+  files = [ "xtc_of_hs.ml" "hs_type.ml" "hs_parser.mly" "hs_lexer.mll" ]
+
+  requires = [ "rainbow-lib" "hot-lib" ]
+end
+
+begin program "hot"
+  comp += "-rectypes"
+  sort = true
+  files = [ "xtc_of_hot.ml" "sn.ml" "size.ml" "prec.ml" "parser.mly" "ord.ml" "matrix.ml" "main.ml" "loop.ml" "lexer.mll" "hot_of_xtc.ml" "fo.ml" "expr.ml" "db.ml" "call.ml" "acc.ml" ]
+
+  requires = [ "rainbow-lib" "hot-lib" "hot-haskell" ]
+end
+
+
+(* SECTION devel *)
+
+begin program "ml_of_hs"
+  dirname = [ "devel/tuong/ghc" ]
+  files = [ "m.ml" ]
+
+  requires = [ "unix" ]
+end
+
+begin library "ml_generated"
+  dirname = [ "devel/tuong/ghc_generated" ]
+  files = [ "type.ml" "value.ml" ]
+end
+
+begin program "bench"
+  comp += [ "-g" "-warn-error" "Ap" ]
+
+  dirname = [ "devel/tuong/ghc_generated_bench" ]
+  files = [ "hot_of_hs.ml" ]
+
+  requires = [ "rainbow-lib" "ml_generated" ]
+end
+
+begin program "xtc_of_hs"
+  comp += "-rectypes"
+  comp += [ "-g" "-warn-error" "Apy" ]
+
+  dirname = [ "devel/tuong/xtc_of_hs" ]
+  files = [ "conv_hs.ml" "main.ml" ]
+
+  requires = [ "hot-haskell" "batteries" "str" ]
+end
+

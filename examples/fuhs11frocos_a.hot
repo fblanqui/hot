@@ -1,0 +1,22 @@
+/* NO. this system does not terminate:
+- the first-order part terminates but does not ce-terminate
+- the higher-order part simulates ce-projections
+*/
+
+TYPES
+o;
+
+FUNS
+a, b : o;
+f, g : o => o => o;
+h : (o => o) => o;
+
+VARS
+x : o;
+F : o => o;
+
+RULES
+f x b -> g x x;
+g x a -> f x x;
+h F -> F a;
+h F -> F b;

@@ -1,0 +1,12 @@
+/* NO. non-terminating first-order system */
+
+TYPES
+N;
+
+FUNS
+a : N;
+f : N => N;
+
+RULES
+a -> a;
+f -> (x:N.a);

@@ -1,0 +1,17 @@
+TYPES
+nat;
+
+FUNS
+0 : nat;
+I : nat => nat;
+s : nat => nat;
+twice : (nat => nat) => nat => nat;
+
+VARS
+X, x : nat;
+Z : nat => nat;
+
+RULES
+twice Z x -> Z (Z x);
+I (s X) -> s (twice (x0:nat.I x0) X);
+I 0 -> 0;

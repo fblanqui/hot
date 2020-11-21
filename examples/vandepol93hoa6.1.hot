@@ -1,0 +1,26 @@
+/* YES. equal to TPDB/TRS/Mixed_HO_10/process.xml modulo some
+eta-reductions in rules */
+
+TYPES
+Data, Proc;
+
+FUNS
+delta : Proc;
++, * : Proc => Proc => Proc;
+Sigma : (Data => Proc) => Proc;
+
+VARS
+D : Data;
+P, Q : Data => Proc;
+X, Y, Z : Proc;
+
+RULES
++ X X -> X;
+* (+ X Y) Z -> + (* X Z) (* Y Z);
+* (* X Y) Z -> * X (* Y Z);
++ X delta -> X;
+* delta X -> delta;
+Sigma (d:Data.X) -> X;
++ (Sigma P) (P D) -> Sigma P;
+Sigma (d:Data.+ (P d) (Q d)) -> + (Sigma P) (Sigma Q);
+* (Sigma P) X -> Sigma (d:Data.* (P d) X);

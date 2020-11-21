@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# HOT, a Higher-Order Termination prover
+# See the COPYRIGHTS and LICENSE files.
+
+if test $# -ne 1
+then
+  echo usage: ./configure rainbow_dir
+  exit 1
+fi
+
+echo generate Makefile...
+sed -e "s|RAINBOW :=|RAINBOW := $1|" Makefile.in > Makefile

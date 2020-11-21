@@ -1,0 +1,14 @@
+/* YES */
+
+TYPES
+N;
+
+FUNS
+s, f, id : N=>N;
+
+VARS
+x : N;
+
+RULES
+id -> (x:N.x);
+f (s x) -> f (id x);

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# HOT, a Higher-Order Termination prover
+# See the COPYRIGHTS and LICENSE files.
+#
+# - Frederic Blanqui, 2012-06-07
+
+# script file used on the termination competition platform
+
+# $1: XTC file
+# $2: timeout
+
+hot='./main -v -lps lp_solve -fop ttt2 -xtc'
+
+if test -f ./main
+then
+  $hot $1
+else
+  make all > /dev/null 2>&1 && $hot $1
+fi

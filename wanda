@@ -1,0 +1,3 @@
+#!/bin/sh
+
+`dirname $0`/call ~/src/wanda110813/wanda.exe $1 -i fo_prover -v

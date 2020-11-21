@@ -1,0 +1,32 @@
+/* YES */
+
+TYPES
+N, L;
+
+FUNS
+nil : L;
+cons : N => L => L;
+append : L => L => L;
+map : (N => N) => L => L;
+reverse, shuffle, mirror : L => L;
+
+VARS
+h : N;
+l, t : L;
+F : N => N;
+
+RULES
+append nil l -> l;
+append (cons h t) l -> cons h (append t l);
+
+reverse nil -> nil;
+reverse (cons h t) -> append (reverse t) (cons h nil);
+
+shuffle nil -> nil;
+shuffle (cons h t) -> cons h (shuffle (reverse t));
+
+mirror nil -> nil;
+mirror (cons h t) -> append (cons h (mirror t)) (cons h nil);
+
+map F nil -> nil;
+map F (cons h t) -> cons (F h) (map F t);

@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# $1: prover
+# $2: file
+# $3, ...: prover options
+
+prover=$1
+cmd=`basename $prover`
+file=$2
+shift 2
+tmp=/tmp/$cmd$$
+dir=`pwd`
+
+(ulimit -t 60; cd `dirname $prover`; $cmd $* $dir/$file > $tmp 2>&1) 2> /dev/null
+
+if test $? -ne 0
+then
+  echo MAYBE
+else
+  if grep -q YES $tmp
+  then
+    echo YES
+  else
+    if grep -q NO $tmp
+    then
+      echo NO
+    else
+      echo MAYBE
+    fi
+  fi
+fi
+
+cat $tmp
+rm -f $tmp
+exit 0

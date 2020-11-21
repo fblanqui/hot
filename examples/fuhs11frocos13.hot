@@ -1,0 +1,27 @@
+/* YES. same as TPDB/TRS/Kop_11/average */
+
+TYPES
+N;
+
+FUNS
+0 : N;
+s, check : N => N;
+avg, apply : N => N => N;
+fun : (N => N) => N;
+
+VARS
+x, y : N;
+F : N => N;
+
+RULES
+avg 0 0 -> 0;
+avg 0 (s 0) -> 0;
+avg 0 (s 0) -> s 0;
+avg 0 (s (s 0)) -> s 0;
+avg (s x) y -> avg x (s y);
+avg x (s (s (s y))) -> s (avg (s x) y);
+
+apply (fun F) y -> F (check y);
+
+check 0 -> 0;
+check (s x) -> s (check x);

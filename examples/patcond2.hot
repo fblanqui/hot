@@ -1,0 +1,19 @@
+/* YES */
+
+TYPES
+N, O;
+
+FUNS
+0_N : N;
+s_N : N => N;
+s, g : O => O;
+L : (N => O) => O;
+c : O => O => O;
+
+VARS
+x, y : O;
+f : N => O;
+
+RULES
+g (L f) -> f 0_N;
+g (c x (s (s y))) -> g (c x (s y));

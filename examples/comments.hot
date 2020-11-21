@@ -1,0 +1,5 @@
+/* YES. empty rewrite system */
+
+// every thing after // is ignored
+
+/* every thing between /* and */ // is ignored

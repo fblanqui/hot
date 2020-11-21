@@ -1,0 +1,110 @@
+HOT, a Higher-Order Termination prover
+See the COPYRIGHTS and LICENSE files.
+
+Examples that cannot be dealt with:
+-----------------------------------
+
+HOT:
+----
+
+fuhs11frocos13: YES
+negative constructor
+
+fuhs11frocos_a: NO
+counter-example to modularity of termination
+
+pat_cond2: YES
+pattern condition not satisfied
+
+vandepol93hoa6.3: YES
+not a pattern lhs, but var accessible
+
+vandepol96phd80: YES
+negative constructor
+
+Kop_11:
+-------
+
+average: YES
+safe negative variable
+
+lambda5: NO
+negative variable
+with t=\x:a.\y:b.f(gyx)y and \t={F=t,U=ht},
+l\t -> i(F\t Y U\t) ->beta^2 i(l\t)
+
+noneating: YES
+defined symbol with no argument
+dps do not match
+
+Mixed_HO_10:
+------------
+
+applicative: MAYBE
+beta-redex in lhs
+l ->beta f(F a)(G a) which is not a pattern
+
+counterex2: NO
+l\t -> r\t ->beta l\t where \t={X=\x.fxx}
+
+curry: YES
+because of arities
+
+eval: YES for Wanda
+negative constructor
+
+findzero: MAYBE
+negative constructor
+
+hrsdif2: NO
+with \t={F=\x.0}, l\t -> r\t ->beta F\t (l\t)
+
+inlamb: YES
+dps do not match
+
+iterative: YES for Wanda
+negative constructor
+
+lambda1: NO
+negative constructor
+with \t={X=\x.fapp x x, Y=lam(\x.fapp x x)},
+l\t -> (\x.fapp x x)Y\t ->beta fapp Y\t Y\t = l\t
+
+lambda2: NO
+first-order rewrite system
+with \t={X=fapp v v,Y=lam(fapp v v)}and l=fapp(lam X)Y,
+l\t -> (subst X Y)\t -> fapp(subst v Y\t)(subst v Y\t) -> l\t
+matching on defined symbol
+
+loopy: YES
+dps do not match
+
+noabs: MAYBE
+negative constructor
+
+prenex: YES
+negative constructor
+
+process: YES
+matching on defined symbols
+
+sdu: YES
+not a pattern lhs, but var accessible
+
+Uncurried_Applicative_11:
+-------------------------
+
+Applicative_05__Ex2_8_1ConstSubstFix: MAYBE
+Applicative_05__Ex2PrimRec: MAYBE
+Applicative_05__Ex6_11: MAYBE
+Applicative_05__Ex7OrdinalRec: MAYBE
+Applicative_05__TypeEx3: MAYBE
+Applicative_AG01_innermost__#4.13: MAYBE
+Applicative_AG01_innermost__#4.15: MAYBE
+Applicative_AG01_innermost__#4.17: MAYBE
+Applicative_AG01_innermost__#4.2: MAYBE
+Applicative_AG01_innermost__#4.8: MAYBE
+Applicative_first_order_05__13: MAYBE
+Applicative_first_order_05__30: MAYBE
+Applicative_first_order_05__31: MAYBE
+Applicative_first_order_05__#3.40: MAYBE

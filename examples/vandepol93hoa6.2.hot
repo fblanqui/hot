@@ -1,0 +1,18 @@
+/* YES */
+
+TYPES
+Term, Form;
+
+FUNS
+forall : (Term => Form) => Form;
+and, or : Form => Form => Form;
+
+VARS
+P, Q : Form;
+P', Q' : Term => Form;
+
+RULES
+forall (x:Term. P) -> P;
+forall (x:Term. and (P' x) (Q' x)) -> and (forall P') (forall Q');
+forall (x:Term. or (P' x) Q) -> or (forall P') Q;
+forall (x:Term. or P (Q' x)) -> or P (forall Q');

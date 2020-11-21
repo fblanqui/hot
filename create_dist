@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# HOT, a Higher-Order Termination prover
+# See the COPYRIGHTS and LICENSE files.
+#
+# - Frederic Blanqui, 2012-06-07
+
+prog=`basename $0`
+
+usage () {
+  echo "usage: $prog [-h]"
+}
+
+help () {
+  cat <<EOF
+Create a directory 'dist' for distributing HOT.
+
+Options:
+-h Provide this help and exit
+EOF
+}
+
+case "$1" in
+-h) usage; echo; help; exit 0
+esac
+
+if test -f dist; then echo "dist already exists"; exit 1; fi
+
+cwd=`pwd`
+
+set -x
+mkdir -p dist
+cd dist
+svn co svn+ssh://scm.gforge.inria.fr/svn/hot
+cd hot
+mv INSTALL.dist INSTALL
+./configure rainbow
+rm -rf `find . -name .svn` configure Makefile.in thor wanda create_dist devel \
+  TODO hot call
+svn co svn://scm.gforge.inria.fr/svn/rainbow/trunk/rainbow
+cd rainbow
+rm -rf `find . -name .svn` old devel
+cd ../..
+zip -r hot.zip hot
+cd $cwd

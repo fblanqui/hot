@@ -1,0 +1,17 @@
+/* YES. similar to TPDB/TRS/Mixed_HO_10/sdu.xml */
+
+TYPES
+Term;
+
+FUNS
+case : Term => (Term => Term) => (Term => Term) => Term;
+inl, inr : Term => Term;
+
+VARS
+X, U : Term;
+F, G : Term => Term;
+
+RULES
+case (inl X) F G -> F X;
+case (inr X) F G -> G X;
+case U (x:Term.F(inl x)) (x:Term.F(inr x)) -> F U;
